@@ -17,8 +17,16 @@ export const getBalance = async (address: string): Promise<string> => {
 		params: [address, 'latest'],
 		id: 1,
 	};
-	const response = await axios.post<RPCResponse>(RPC_ENDPOINT, payload);
-	return convertFromSmallestUnit(response.data.result, 18); //convert from wei to CRO
+	try {
+		const response = await axios.post<RPCResponse>(RPC_ENDPOINT, payload);
+		if (!response.data || !response.data.result) {
+			throw new Error('Invalid response: Missing result field');
+		}
+		return convertFromSmallestUnit(BigInt(response.data.result), 18); //convert from wei to CRO
+	} catch (error) {
+		console.error('Error fetching balance:', error);
+		throw new Error('Failed to fetch balance');
+	}
 };
 
 export async function getTokenBalance(
