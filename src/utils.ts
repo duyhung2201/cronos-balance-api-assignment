@@ -1,9 +1,9 @@
 import { ethers } from 'ethers';
 
-export function convertFromSmallestUnit(
+export const convertFromSmallestUnit = (
 	rawValue: bigint,
 	decimals: number
-): string {
+): string => {
 	const bigIntValue = BigInt(rawValue);
 	const divisor = BigInt(10) ** BigInt(decimals);
 
@@ -20,13 +20,13 @@ export function convertFromSmallestUnit(
 	}
 
 	return `${wholePart.toString()}.${fractionalStr}`;
-}
+};
 
-export function getCallData(
+export const getCallData = (
 	functionName: string,
 	args: any[],
 	abi: any[]
-): string {
+): string => {
 	const contractInterface = new ethers.Interface(abi);
 
 	// Encode the function call
@@ -37,4 +37,13 @@ export function getCallData(
 		console.error('Error encoding callData:', error);
 		throw new Error('Invalid function name or arguments');
 	}
-}
+};
+
+/**
+ * Validates if an Ethereum address is in the correct format.
+ * @param address - The address to validate.
+ * @returns True if valid, false otherwise.
+ */
+export const isValidAddress = (address: string): boolean => {
+	return /^0x[a-fA-F0-9]{40}$/.test(address);
+};
