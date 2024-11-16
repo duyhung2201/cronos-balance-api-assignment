@@ -35,7 +35,7 @@ export const getCallData = (
 		return callData;
 	} catch (error) {
 		console.error('Error encoding callData:', error);
-		throw new Error('Invalid function name or arguments');
+		throw new Error('Error encoding call data');
 	}
 };
 

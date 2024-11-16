@@ -13,39 +13,44 @@ export async function getTokenBalance(
 	address: string,
 	tokenAddress: string
 ): Promise<string> {
-	if (!isValidAddress(address)) {
-		throw new InvalidAddressError('Invalid user address format');
+	try {
+		if (!isValidAddress(address)) {
+			throw new InvalidAddressError('Invalid user address format');
+		}
+
+		if (!isValidAddress(tokenAddress)) {
+			throw new InvalidAddressError('Invalid token address format');
+		}
+
+		// Fetch the decimals and raw balance
+		const decimals = await getTokenDecimals(tokenAddress);
+		const rawBalance = await getRawTokenBalance(address, tokenAddress);
+
+		return convertFromSmallestUnit(rawBalance!, decimals);
+	} catch (error) {
+		console.error('Error in getTokenBalance:', error);
+		throw new InternalServerError('Failed to get token balance');
 	}
-
-	if (!isValidAddress(tokenAddress)) {
-		throw new InvalidAddressError('Invalid token address format');
-	}
-
-	// Fetch the decimals and raw balance
-	const decimals = await getTokenDecimals(tokenAddress);
-	const rawBalance = await getRawTokenBalance(address, tokenAddress);
-
-	return convertFromSmallestUnit(rawBalance!, decimals);
 }
 
 const getRawTokenBalance = async (
 	address: string,
 	tokenAddress: string
 ): Promise<bigint> => {
-	const payload = {
-		jsonrpc: '2.0',
-		method: 'eth_call',
-		params: [
-			{
-				to: tokenAddress,
-				data: getCallData('balanceOf', [address], crc20Abi),
-			},
-			'latest',
-		],
-		id: 1,
-	};
-
 	try {
+		const payload = {
+			jsonrpc: '2.0',
+			method: 'eth_call',
+			params: [
+				{
+					to: tokenAddress,
+					data: getCallData('balanceOf', [address], crc20Abi),
+				},
+				'latest',
+			],
+			id: 1,
+		};
+
 		const response = await axios.post<RPCResponse>(RPC_ENDPOINT, payload);
 
 		if (!response.data || !response.data.result) {
@@ -64,20 +69,20 @@ const getRawTokenBalance = async (
 };
 
 const getTokenDecimals = async (tokenAddress: string): Promise<number> => {
-	const data = {
-		jsonrpc: '2.0',
-		method: 'eth_call',
-		params: [
-			{
-				to: tokenAddress,
-				data: getCallData('decimals', [], crc20Abi),
-			},
-			'latest',
-		],
-		id: 1,
-	};
-
 	try {
+		const data = {
+			jsonrpc: '2.0',
+			method: 'eth_call',
+			params: [
+				{
+					to: tokenAddress,
+					data: getCallData('decimals', [], crc20Abi),
+				},
+				'latest',
+			],
+			id: 1,
+		};
+
 		const response = await axios.post<RPCResponse>(RPC_ENDPOINT, data);
 
 		if (!response.data || !response.data.result) {
