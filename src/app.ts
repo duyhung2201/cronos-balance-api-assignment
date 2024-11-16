@@ -5,12 +5,12 @@ import { errorHandler } from './middleware/errorHandler';
 import { apiKeyAuth } from './middleware/apiKeyAuth';
 
 const app = express();
+app.use(apiKeyAuth);
 const PORT = process.env.PORT || 3000;
 
 app.get('/balance/:address', balanceController);
 app.get('/token-balance/:address/:tokenAddress', tokenBalanceController);
 
-app.use(apiKeyAuth);
 app.use(errorHandler);
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
