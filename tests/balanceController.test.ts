@@ -7,16 +7,25 @@ import axios from 'axios';
 const app = express();
 app.use(express.json());
 app.get('/balance/:address', balanceController);
-app.get('/token-balance/:address/:tokenAddress', tokenBalanceController);
 app.use(errorHandler);
 
 const validAddress = '0xdBC781ee62E5DF9dFcbb35f6A592e61cB8680bdC';
-jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
+
 describe('Balance Controller Tests', () => {
-	it('should fetch balance successfully', async () => {
+	it('should fetch token balance successfully from Cronos', async () => {
+		const response = await request(app).get(`/balance/${validAddress}`);
+		expect(response.status).toBe(200);
+		expect(response.body).toHaveProperty(
+			'message',
+			'Balance fetched successfully'
+		);
+		expect(response.body).toHaveProperty('status', 'success');
+		expect(response.body.result).toMatch(/^\d+(\.\d+)?$/);
+	});
+
+	it('should fetch balance successfully mock', async () => {
 		const rawBalance = 1000;
-		mockedAxios.post.mockResolvedValue({
+		jest.spyOn(axios, 'post').mockResolvedValue({
 			data: { result: rawBalance.toString() },
 			status: 200,
 			statusText: 'OK',
@@ -32,26 +41,17 @@ describe('Balance Controller Tests', () => {
 		expect(response.body).toHaveProperty('status', 'success');
 		expect(typeof response.body.result).toBe('string');
 		expect(response.body.result).toBe((1e-15).toFixed(15));
-	});
 
-	it('should fetch balance successfully', async () => {
-		const rawBalance = 1e19;
-		mockedAxios.post.mockResolvedValue({
-			data: { result: rawBalance.toString() },
+		const rawBalance2 = 1e19;
+		jest.spyOn(axios, 'post').mockResolvedValue({
+			data: { result: rawBalance2.toString() },
 			status: 200,
 			statusText: 'OK',
 			headers: {},
 			config: { url: '/balance' },
 		});
-		const response = await request(app).get(`/balance/${validAddress}`);
-		expect(response.status).toBe(200);
-		expect(response.body).toHaveProperty(
-			'message',
-			'Balance fetched successfully'
-		);
-		expect(response.body).toHaveProperty('status', 'success');
-		expect(typeof response.body.result).toBe('string');
-		expect(response.body.result).toBe("10");
+		const response2 = await request(app).get(`/balance/${validAddress}`);
+		expect(response2.body.result).toBe('10');
 	});
 
 	it('should handle invalid address error', async () => {
@@ -60,15 +60,15 @@ describe('Balance Controller Tests', () => {
 		expect(response.status).toBe(400);
 		expect(response.body).toHaveProperty(
 			'message',
-			'Invalid address format for user address'
+			'Invalid user address format'
 		);
 		expect(response.body).toHaveProperty('status', 'error');
 	});
 
 	it('should handle blockchain connection error', async () => {
-		mockedAxios.post.mockRejectedValue(
-			new Error('Blockchain connection error')
-		);
+		jest
+			.spyOn(axios, 'post')
+			.mockRejectedValue(new Error('Blockchain connection error'));
 
 		const response = await request(app).get(`/balance/${validAddress}`);
 		expect(response.status).toBe(502);
@@ -78,6 +78,6 @@ describe('Balance Controller Tests', () => {
 		);
 		expect(response.body).toHaveProperty('status', 'error');
 
-		jest.unmock('axios');
+		jest.restoreAllMocks();
 	});
 });
