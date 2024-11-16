@@ -13,19 +13,18 @@ export async function getTokenBalance(
 	address: string,
 	tokenAddress: string
 ): Promise<string> {
+	if (!isValidAddress(address)) {
+		throw new InvalidAddressError('Invalid user address format');
+	}
+
+	if (!isValidAddress(tokenAddress)) {
+		throw new InvalidAddressError('Invalid token address format');
+	}
+
+	// Fetch the decimals and raw balance
+	const decimals = await getTokenDecimals(tokenAddress);
+	const rawBalance = await getRawTokenBalance(address, tokenAddress);
 	try {
-		if (!isValidAddress(address)) {
-			throw new InvalidAddressError('Invalid user address format');
-		}
-
-		if (!isValidAddress(tokenAddress)) {
-			throw new InvalidAddressError('Invalid token address format');
-		}
-
-		// Fetch the decimals and raw balance
-		const decimals = await getTokenDecimals(tokenAddress);
-		const rawBalance = await getRawTokenBalance(address, tokenAddress);
-
 		return convertFromSmallestUnit(rawBalance!, decimals);
 	} catch (error) {
 		console.error('Error in getTokenBalance:', error);
