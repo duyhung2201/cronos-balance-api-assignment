@@ -4,21 +4,20 @@
 	"description": "A Node.js backend API service that interacts with the Cronos (EVM) Blockchain. The service provides endpoints to query the CRO balance of an account address and the balance of a CRC20 token for a specified contract address using RPC methods.",
 	"main": "index.js",
 	"scripts": {
-		"test": "mocha --extensions ts tests/**/*.test.ts"
+		"test": "jest"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
 		"@types/axios": "^0.9.36",
-		"@types/chai": "^5.0.1",
 		"@types/express": "^5.0.0",
-		"@types/mocha": "^10.0.9",
+		"@types/jest": "^29.5.14",
 		"@types/node": "^22.9.0",
 		"@types/supertest": "^6.0.2",
-		"chai": "^5.1.2",
-		"mocha": "^10.8.2",
+		"jest": "^29.7.0",
 		"supertest": "^7.0.0",
+		"ts-jest": "^29.2.5",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.6.3"
 	},
