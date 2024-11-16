@@ -11,7 +11,7 @@ const RPC_ENDPOINT = process.env.RPC_ENDPOINT || 'https://evm.cronos.org';
 // Function to get the CRO balance of an address
 export const getBalance = async (address: string): Promise<string> => {
 	if (!isValidAddress(address)) {
-		throw new InvalidAddressError('Invalid address format for user address');
+		throw new InvalidAddressError('Invalid user address format');
 	}
 
 	const payload = {
