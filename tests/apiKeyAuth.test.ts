@@ -16,45 +16,63 @@ const validAddress = '0xdBC781ee62E5DF9dFcbb35f6A592e61cB8680bdC';
 const validTokenAddress = '0xe44fd7fcb2b1581822d0c862b68222998a0c299a';
 
 describe('API Key Authentication Middleware', () => {
-    it('should return 401 if no API key is provided for /balance', async () => {
-        const response = await request(app).get(`/balance/${validAddress}`);
-        expect(response.status).toBe(401);
-        expect(response.body).toHaveProperty('message', 'Unauthorized');
-    });
+	it('should return 401 if no API key is provided for /balance', async () => {
+		const response = await request(app).get(`/balance/${validAddress}`);
+		expect(response.status).toBe(401);
+		expect(response.body).toHaveProperty('error', {
+			code: 401,
+			message: 'API key is invalid or missing.',
+			status: 'UNAUTHENTICATED',
+		});
+	});
 
-    it('should return 401 if an incorrect API key is provided for /balance', async () => {
-        const response = await request(app)
-            .get(`/balance/${validAddress}`)
-            .set('x-api-key', 'wrong-api-key');
-        expect(response.status).toBe(401);
-        expect(response.body).toHaveProperty('message', 'Unauthorized');
-    });
+	it('should return 401 if an incorrect API key is provided for /balance', async () => {
+		const response = await request(app)
+			.get(`/balance/${validAddress}`)
+			.set('x-api-key', 'wrong-api-key');
+		expect(response.status).toBe(401);
+		expect(response.body).toHaveProperty('error', {
+			code: 401,
+			message: 'API key is invalid or missing.',
+			status: 'UNAUTHENTICATED',
+		});
+	});
 
-    it('should allow access if the correct API key is provided for /balance', async () => {
-        const response = await request(app)
-            .get(`/balance/${validAddress}`)
-            .set('x-api-key', API_KEY);
-        expect(response.status).toBe(200);
-    });
+	it('should allow access if the correct API key is provided for /balance', async () => {
+		const response = await request(app)
+			.get(`/balance/${validAddress}`)
+			.set('x-api-key', API_KEY);
+		expect(response.status).toBe(200);
+	});
 
-    it('should return 401 if no API key is provided for /token-balance', async () => {
-        const response = await request(app).get(`/token-balance/${validAddress}/${validTokenAddress}`);
-        expect(response.status).toBe(401);
-        expect(response.body).toHaveProperty('message', 'Unauthorized');
-    });
+	it('should return 401 if no API key is provided for /token-balance', async () => {
+		const response = await request(app).get(
+			`/token-balance/${validAddress}/${validTokenAddress}`
+		);
+		expect(response.status).toBe(401);
+		expect(response.body).toHaveProperty('error', {
+			code: 401,
+			message: 'API key is invalid or missing.',
+			status: 'UNAUTHENTICATED',
+		});
+	});
 
-    it('should return 401 if an incorrect API key is provided for /token-balance', async () => {
-        const response = await request(app)
-            .get(`/token-balance/${validAddress}/${validTokenAddress}`)
-            .set('x-api-key', 'wrong-api-key');
-        expect(response.status).toBe(401);
-        expect(response.body).toHaveProperty('message', 'Unauthorized');
-    });
+	it('should return 401 if an incorrect API key is provided for /token-balance', async () => {
+		const response = await request(app)
+			.get(`/token-balance/${validAddress}/${validTokenAddress}`)
+			.set('x-api-key', 'wrong-api-key');
+		expect(response.status).toBe(401);
+		expect(response.body).toHaveProperty('error', {
+			code: 401,
+			message: 'API key is invalid or missing.',
+			status: 'UNAUTHENTICATED',
+		});
+	});
 
-    it('should allow access if the correct API key is provided for /token-balance', async () => {
-        const response = await request(app)
-            .get(`/token-balance/${validAddress}/${validTokenAddress}`)
-            .set('x-api-key', API_KEY);
-        expect(response.status).toBe(200);
-    });
+	it('should allow access if the correct API key is provided for /token-balance', async () => {
+		const response = await request(app)
+			.get(`/token-balance/${validAddress}/${validTokenAddress}`)
+			.set('x-api-key', API_KEY);
+		expect(response.status).toBe(200);
+	});
 });
