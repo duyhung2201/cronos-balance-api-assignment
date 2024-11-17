@@ -13,14 +13,15 @@ export const errorHandler = (
 	next: NextFunction
 ) => {
 	logger.error(`Error: ${err.name} - ${err.message}`);
-
+	const timestamp = new Date().toISOString();
 	// Map known errors
 	if (err instanceof InvalidAddressError) {
 		res.status(400).json({
 			error: {
 				code: 400,
 				message: err.message,
-				status: 'INVALID_ADDRESS',
+				errorType: 'INVALID_ADDRESS',
+				timestamp,
 			},
 		});
 	} else if (err instanceof BlockchainConnectionError) {
@@ -28,7 +29,8 @@ export const errorHandler = (
 			error: {
 				code: 502,
 				message: err.message,
-				status: 'BLOCKCHAIN_CONNECTION_ERROR',
+				errorType: 'BLOCKCHAIN_CONNECTION_ERROR',
+				timestamp,
 			},
 		});
 	} else {
@@ -37,7 +39,8 @@ export const errorHandler = (
 			error: {
 				code: 500,
 				message: 'An unexpected error occurred.',
-				status: 'INTERNAL_SERVER_ERROR',
+				errorType: 'INTERNAL_SERVER_ERROR',
+				timestamp,
 			},
 		});
 	}
