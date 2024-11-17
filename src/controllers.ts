@@ -9,11 +9,14 @@ export const balanceController = async (
 ) => {
 	try {
 		const { address } = req.params;
-		const result = await getBalance(address);
+		const balance = await getBalance(address);
 		res.json({
-			message: 'Balance fetched successfully',
-			result,
 			status: 'success',
+			message: 'Balance fetched successfully',
+			data: {
+				address,
+				balance,
+			},
 		});
 	} catch (error) {
 		next(error);
@@ -27,11 +30,15 @@ export const tokenBalanceController = async (
 ) => {
 	try {
 		const { address, tokenAddress } = req.params;
-		const result = await getTokenBalance(address, tokenAddress);
+		const balance = await getTokenBalance(address, tokenAddress);
 		res.json({
-			message: 'Token balance fetched successfully',
-			result,
 			status: 'success',
+			message: 'Token balance fetched successfully',
+			data: {
+				address,
+				tokenAddress,
+				balance,
+			},
 		});
 	} catch (error) {
 		next(error);
