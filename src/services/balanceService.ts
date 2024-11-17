@@ -7,6 +7,13 @@ import {
 
 const RPC_ENDPOINT = process.env.RPC_ENDPOINT || 'https://evm.cronos.org';
 
+/**
+ * Fetches the CRO balance for a given address.
+ *
+ * @param address - The address to fetch the CRO balance for.
+ * @returns The CRO balance as a formatted string.
+ * @throws BlockchainConnectionError if there is an error fetching the balance.
+ */
 export const getBalance = async (address: string): Promise<string> => {
 	if (!isValidAddress(address)) {
 		throw new InvalidAddressError(`Invalid user address format: ${address}`);

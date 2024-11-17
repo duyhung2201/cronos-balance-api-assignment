@@ -2,6 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 import { getTokenBalance } from './services/tokenService';
 import { getBalance } from './services/balanceService';
 
+/**
+Controller to handle fetching the balance of an address.
+*/
 export const balanceController = async (
 	req: Request,
 	res: Response,
@@ -23,6 +26,9 @@ export const balanceController = async (
 	}
 };
 
+/**
+Controller to handle fetching the token balance of an address for a specific token.
+*/
 export const tokenBalanceController = async (
 	req: Request,
 	res: Response,

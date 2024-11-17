@@ -14,6 +14,16 @@ import {
 
 const RPC_ENDPOINT = process.env.RPC_ENDPOINT || 'https://evm.cronos.org';
 
+/**
+ * Fetches the token balance for a given address and token contract address.
+ *
+ * @param address - The address to fetch the token balance for.
+ * @param tokenAddress - The token contract address.
+ * @returns The token balance as a string.
+ * @throws InvalidAddressError if the address or token address format is invalid.
+ * @throws BlockchainConnectionError if there is an error fetching the balance.
+ * @throws InternalServerError if there is an error converting the balance.
+ */
 export async function getTokenBalance(
 	address: string,
 	tokenAddress: string
@@ -28,11 +38,11 @@ export async function getTokenBalance(
 		);
 	}
 
-	// Fetch the decimals and raw balance
 	const rawBalance = await getRawTokenBalance(address, tokenAddress);
 	const decimals = await getTokenDecimals(tokenAddress);
 
 	try {
+		// Convert the raw balance to a human-readable format
 		return convertFromSmallestUnit(rawBalance!, decimals);
 	} catch (error) {
 		logger.error('Error in getTokenBalance:', {
@@ -43,6 +53,14 @@ export async function getTokenBalance(
 	}
 }
 
+/**
+ * Fetches the raw token balance for a given address and token contract address.
+ *
+ * @param address - The address to fetch the token balance for.
+ * @param tokenAddress - The token contract address.
+ * @returns The raw token balance as a bigint.
+ * @throws BlockchainConnectionError if there is an error fetching the balance.
+ */
 const getRawTokenBalance = async (
 	address: string,
 	tokenAddress: string
@@ -68,7 +86,6 @@ const getRawTokenBalance = async (
 				'Failed to retrieve raw token balance'
 			);
 		}
-
 		return BigInt(response.data.result);
 	} catch (error) {
 		logger.error('Error in getRawTokenBalance:', {
@@ -81,6 +98,13 @@ const getRawTokenBalance = async (
 	}
 };
 
+/**
+ * Fetches the token decimal of a token contract address.
+ *
+ * @param tokenAddress - The token contract address.
+ * @returns The decimal as number.
+ * @throws BlockchainConnectionError if there is an error fetching the decimal.
+ */
 const getTokenDecimals = async (tokenAddress: string): Promise<number> => {
 	try {
 		const data = {
