@@ -37,7 +37,7 @@ describe('Token Controller Tests', () => {
 		expect(response.status).toBe(400);
 		expect(response.body).toHaveProperty('error', {
 			code: 400,
-			message: 'Invalid user address format',
+			message: `Invalid user address format: ${invalidAddress}`,
 			status: 'INVALID_ADDRESS',
 		});
 	});
@@ -50,7 +50,7 @@ describe('Token Controller Tests', () => {
 		expect(response.status).toBe(400);
 		expect(response.body).toHaveProperty('error', {
 			code: 400,
-			message: 'Invalid token address format',
+			message: `Invalid token address format: ${invalidAddress}`,
 			status: 'INVALID_ADDRESS',
 		});
 	});
@@ -66,9 +66,28 @@ describe('Token Controller Tests', () => {
 		expect(response.status).toBe(502);
 		expect(response.body).toHaveProperty('error', {
 			code: 502,
-			message: 'Error retrieving token decimals from blockchain',
+			message: 'Error fetching raw token balance from blockchain',
 			status: 'BLOCKCHAIN_CONNECTION_ERROR',
 		});
 		jest.restoreAllMocks();
+	});
+
+	it('should fail to retrieve raw token balance mock', async () => {
+		jest.spyOn(axios, 'post').mockResolvedValue({
+			data: { result: 'null' },
+			status: 200,
+			statusText: 'OK',
+			headers: {},
+			config: { url: '/balance' },
+		});
+		const response = await request(app)
+			.get(`/token-balance/${validUserAddr}/${validTokenAddr}`)
+			.set('x-api-key', API_KEY);
+		expect(response.status).toBe(502);
+		expect(response.body).toHaveProperty('error', {
+			code: 502,
+			message: 'Error fetching raw token balance from blockchain',
+			status: 'BLOCKCHAIN_CONNECTION_ERROR',
+		});
 	});
 });

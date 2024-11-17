@@ -63,14 +63,14 @@ describe('Balance Controller Tests', () => {
 	});
 
 	it('should handle invalid address error', async () => {
-		const address = 'invalid_address';
+		const invalidAddress = 'invalid_address';
 		const response = await request(app)
-			.get(`/balance/${address}`)
+			.get(`/balance/${invalidAddress}`)
 			.set('x-api-key', API_KEY);
 		expect(response.status).toBe(400);
 		expect(response.body).toHaveProperty('error', {
 			code: 400,
-			message: 'Invalid user address format',
+			message: `Invalid user address format: ${invalidAddress}`,
 			status: 'INVALID_ADDRESS',
 		});
 	});
