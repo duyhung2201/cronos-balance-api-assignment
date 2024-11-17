@@ -1,17 +1,15 @@
 import axios from 'axios';
-import { convertFromSmallestUnit, isValidAddress } from '../utils';
+import { convertFromSmallestUnit, isValidAddress, logger } from '../utils';
 import {
 	BlockchainConnectionError,
-	InternalServerError,
 	InvalidAddressError,
 } from '../errors/customErrors';
 
 const RPC_ENDPOINT = process.env.RPC_ENDPOINT || 'https://evm.cronos.org';
 
-// Function to get the CRO balance of an address
 export const getBalance = async (address: string): Promise<string> => {
 	if (!isValidAddress(address)) {
-		throw new InvalidAddressError('Invalid user address format');
+		throw new InvalidAddressError(`Invalid user address format: ${address}`);
 	}
 
 	const payload = {
@@ -32,7 +30,10 @@ export const getBalance = async (address: string): Promise<string> => {
 
 		return convertFromSmallestUnit(BigInt(response.data.result), 18); // Convert from wei to CRO
 	} catch (error) {
-		console.error('Error in getBalance:', error);
+		logger.error('Error in getBalance:', {
+			error: (error as Error).message,
+			context: { address },
+		});
 		throw new BlockchainConnectionError(
 			'Error retrieving CRO balance from blockchain'
 		);

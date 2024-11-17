@@ -1,5 +1,10 @@
 import axios from 'axios';
-import { convertFromSmallestUnit, getCallData, isValidAddress } from '../utils';
+import {
+	convertFromSmallestUnit,
+	getCallData,
+	isValidAddress,
+	logger,
+} from '../utils';
 import { abi as crc20Abi } from '../abis/ERC20.json';
 import {
 	BlockchainConnectionError,
@@ -14,20 +19,26 @@ export async function getTokenBalance(
 	tokenAddress: string
 ): Promise<string> {
 	if (!isValidAddress(address)) {
-		throw new InvalidAddressError('Invalid user address format');
+		throw new InvalidAddressError(`Invalid user address format: ${address}`);
 	}
 
 	if (!isValidAddress(tokenAddress)) {
-		throw new InvalidAddressError('Invalid token address format');
+		throw new InvalidAddressError(
+			`Invalid token address format: ${tokenAddress}`
+		);
 	}
 
 	// Fetch the decimals and raw balance
-	const decimals = await getTokenDecimals(tokenAddress);
 	const rawBalance = await getRawTokenBalance(address, tokenAddress);
+	const decimals = await getTokenDecimals(tokenAddress);
+
 	try {
 		return convertFromSmallestUnit(rawBalance!, decimals);
 	} catch (error) {
-		console.error('Error in getTokenBalance:', error);
+		logger.error('Error in getTokenBalance:', {
+			error: (error as Error).message,
+			context: { address, tokenAddress },
+		});
 		throw new InternalServerError('Failed to get token balance');
 	}
 }
@@ -60,7 +71,10 @@ const getRawTokenBalance = async (
 
 		return BigInt(response.data.result);
 	} catch (error) {
-		console.error('Error in getRawTokenBalance:', error);
+		logger.error('Error in getRawTokenBalance:', {
+			error: (error as Error).message,
+			context: { address, tokenAddress },
+		});
 		throw new BlockchainConnectionError(
 			'Error fetching raw token balance from blockchain'
 		);
@@ -92,13 +106,16 @@ const getTokenDecimals = async (tokenAddress: string): Promise<number> => {
 		const decimals = parseInt(response.data.result, 16);
 		if (isNaN(decimals)) {
 			throw new InternalServerError(
-				'Invalid decimals value received from blockchain'
+				`Invalid decimals value received from blockchain: ${decimals}`
 			);
 		}
 
 		return decimals;
 	} catch (error) {
-		console.error('Error in getTokenDecimals:', error);
+		logger.error('Error in getTokenDecimals:', {
+			error: (error as Error).message,
+			context: { tokenAddress },
+		});
 		throw new BlockchainConnectionError(
 			'Error retrieving token decimals from blockchain'
 		);

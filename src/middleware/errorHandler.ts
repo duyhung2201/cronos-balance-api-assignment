@@ -4,6 +4,7 @@ import {
 	BlockchainConnectionError,
 	InternalServerError,
 } from '../errors/customErrors';
+import { logger } from '../utils';
 
 export const errorHandler = (
 	err: Error,
@@ -11,7 +12,7 @@ export const errorHandler = (
 	res: Response,
 	next: NextFunction
 ) => {
-	console.error(`Error: ${err.name} - ${err.message}`);
+	logger.error(`Error: ${err.name} - ${err.message}`);
 
 	// Map known errors
 	if (err instanceof InvalidAddressError) {
