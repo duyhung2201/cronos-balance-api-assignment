@@ -12,7 +12,8 @@ export const apiKeyAuth = (req: Request, res: Response, next: NextFunction) => {
 			error: {
 				code: 401,
 				message: 'API key is invalid or missing.',
-				status: 'UNAUTHENTICATED',
+				errorType: 'UNAUTHENTICATED',
+				timestamp : new Date().toISOString()
 			},
 		});
 	}

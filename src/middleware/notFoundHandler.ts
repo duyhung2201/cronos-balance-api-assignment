@@ -9,7 +9,8 @@ export const notFoundHandler = (
 		error: {
 			code: 404,
 			message: 'API not implemented',
-			status: 'NOT_FOUND',
+			errorType: 'NOT_FOUND',
+			timestamp: new Date().toISOString(),
 		},
 	});
 };
