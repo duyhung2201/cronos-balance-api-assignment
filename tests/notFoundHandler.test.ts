@@ -27,7 +27,8 @@ describe('NotFound Middleware', () => {
 		expect(response.body).toHaveProperty('error', {
 			code: 404,
 			message: 'API not implemented',
-			status: 'NOT_FOUND',
+			errorType: 'NOT_FOUND',
+			timestamp: expect.any(String),
 		});
 	});
 	it('should return 404 for unimplemented routes', async () => {
@@ -39,7 +40,8 @@ describe('NotFound Middleware', () => {
 		expect(response.body).toHaveProperty('error', {
 			code: 404,
 			message: 'API not implemented',
-			status: 'NOT_FOUND',
+			errorType: 'NOT_FOUND',
+			timestamp: expect.any(String),
 		});
 	});
 	it('should return 404 for unimplemented routes', async () => {
@@ -51,7 +53,8 @@ describe('NotFound Middleware', () => {
 		expect(response.body).toHaveProperty('error', {
 			code: 404,
 			message: 'API not implemented',
-			status: 'NOT_FOUND',
+			errorType: 'NOT_FOUND',
+			timestamp: expect.any(String),
 		});
 	});
 });

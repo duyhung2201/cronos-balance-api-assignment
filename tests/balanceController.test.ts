@@ -71,7 +71,8 @@ describe('Balance Controller Tests', () => {
 		expect(response.body).toHaveProperty('error', {
 			code: 400,
 			message: `Invalid user address format: ${invalidAddress}`,
-			status: 'INVALID_ADDRESS',
+			errorType: 'INVALID_ADDRESS',
+			timestamp: expect.any(String),
 		});
 	});
 
@@ -88,7 +89,8 @@ describe('Balance Controller Tests', () => {
 		expect(response.body).toHaveProperty('error', {
 			code: 502,
 			message: 'Error retrieving CRO balance from blockchain',
-			status: 'BLOCKCHAIN_CONNECTION_ERROR',
+			errorType: 'BLOCKCHAIN_CONNECTION_ERROR',
+			timestamp: expect.any(String),
 		});
 
 		jest.restoreAllMocks();

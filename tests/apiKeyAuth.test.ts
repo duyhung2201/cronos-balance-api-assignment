@@ -22,7 +22,8 @@ describe('API Key Authentication Middleware', () => {
 		expect(response.body).toHaveProperty('error', {
 			code: 401,
 			message: 'API key is invalid or missing.',
-			status: 'UNAUTHENTICATED',
+			errorType: 'UNAUTHENTICATED',
+			timestamp: expect.any(String),
 		});
 	});
 
@@ -34,7 +35,8 @@ describe('API Key Authentication Middleware', () => {
 		expect(response.body).toHaveProperty('error', {
 			code: 401,
 			message: 'API key is invalid or missing.',
-			status: 'UNAUTHENTICATED',
+			errorType: 'UNAUTHENTICATED',
+			timestamp: expect.any(String),
 		});
 	});
 
@@ -53,7 +55,8 @@ describe('API Key Authentication Middleware', () => {
 		expect(response.body).toHaveProperty('error', {
 			code: 401,
 			message: 'API key is invalid or missing.',
-			status: 'UNAUTHENTICATED',
+			errorType: 'UNAUTHENTICATED',
+			timestamp: expect.any(String),
 		});
 	});
 
@@ -65,7 +68,8 @@ describe('API Key Authentication Middleware', () => {
 		expect(response.body).toHaveProperty('error', {
 			code: 401,
 			message: 'API key is invalid or missing.',
-			status: 'UNAUTHENTICATED',
+			errorType: 'UNAUTHENTICATED',
+			timestamp: expect.any(String),
 		});
 	});
 

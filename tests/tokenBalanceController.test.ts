@@ -38,7 +38,8 @@ describe('Token Controller Tests', () => {
 		expect(response.body).toHaveProperty('error', {
 			code: 400,
 			message: `Invalid user address format: ${invalidAddress}`,
-			status: 'INVALID_ADDRESS',
+			errorType: 'INVALID_ADDRESS',
+			timestamp: expect.any(String),
 		});
 	});
 
@@ -51,7 +52,8 @@ describe('Token Controller Tests', () => {
 		expect(response.body).toHaveProperty('error', {
 			code: 400,
 			message: `Invalid token address format: ${invalidAddress}`,
-			status: 'INVALID_ADDRESS',
+			errorType: 'INVALID_ADDRESS',
+			timestamp: expect.any(String),
 		});
 	});
 
@@ -67,7 +69,8 @@ describe('Token Controller Tests', () => {
 		expect(response.body).toHaveProperty('error', {
 			code: 502,
 			message: 'Error fetching raw token balance from blockchain',
-			status: 'BLOCKCHAIN_CONNECTION_ERROR',
+			errorType: 'BLOCKCHAIN_CONNECTION_ERROR',
+			timestamp: expect.any(String),
 		});
 		jest.restoreAllMocks();
 	});
@@ -87,7 +90,8 @@ describe('Token Controller Tests', () => {
 		expect(response.body).toHaveProperty('error', {
 			code: 502,
 			message: 'Error fetching raw token balance from blockchain',
-			status: 'BLOCKCHAIN_CONNECTION_ERROR',
+			errorType: 'BLOCKCHAIN_CONNECTION_ERROR',
+			timestamp: expect.any(String),
 		});
 	});
 });
