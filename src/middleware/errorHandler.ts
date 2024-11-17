@@ -13,25 +13,31 @@ export const errorHandler = (
 ) => {
 	console.error(`Error: ${err.name} - ${err.message}`);
 
+	// Map known errors
 	if (err instanceof InvalidAddressError) {
 		res.status(400).json({
-			message: err.message,
-			status: 'error',
+			error: {
+				code: 400,
+				message: err.message,
+				status: 'INVALID_ADDRESS',
+			},
 		});
-		return;
-	}
-
-	if (err instanceof BlockchainConnectionError) {
+	} else if (err instanceof BlockchainConnectionError) {
 		res.status(502).json({
-			message: err.message,
-			status: 'error',
+			error: {
+				code: 502,
+				message: err.message,
+				status: 'BLOCKCHAIN_CONNECTION_ERROR',
+			},
 		});
-		return;
+	} else {
+		// Fallback for unhandled errors
+		res.status(500).json({
+			error: {
+				code: 500,
+				message: 'An unexpected error occurred.',
+				status: 'INTERNAL_SERVER_ERROR',
+			},
+		});
 	}
-
-	const internalError = new InternalServerError();
-	res.status(500).json({
-		message: err.message,
-		status: 'error',
-	});
 };

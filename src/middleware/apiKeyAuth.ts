@@ -8,6 +8,12 @@ export const apiKeyAuth = (req: Request, res: Response, next: NextFunction) => {
 	if (apiKey && apiKey === API_KEY) {
 		next();
 	} else {
-		res.status(401).json({ message: 'Unauthorized' });
+		res.status(401).json({
+			error: {
+				code: 401,
+				message: 'API key is invalid or missing.',
+				status: 'UNAUTHENTICATED',
+			},
+		});
 	}
 };
