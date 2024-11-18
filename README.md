@@ -74,6 +74,13 @@ Example:
 curl -H "x-api-key: your-secure-api-key" http://localhost:3000/token-balance/0xdBC781ee62E5DF9dFcbb35f6A592e61cB8680bdC/0xe44fd7fcb2b1581822d0c862b68222998a0c299a
 ```
 
+## Running Unit Tests
+Unit tests have been implemented to ensure the correctness of the API endpoints and middleware. To run the tests, use the following command:
+```sh
+npm test
+```
+This will run the Jest tests and verify that the API key authentication middleware, balance fetching, and token balance fetching functionalities are working as expected.
+
 ## API Endpoints
 
 ### `GET /balance/:accountAddress`
