@@ -2,8 +2,7 @@ import request from 'supertest';
 import express from 'express';
 import { apiKeyAuth } from '../src/middleware/apiKeyAuth';
 import { balanceController, tokenBalanceController } from '../src/controllers';
-import { errorHandler } from '../src/middleware/errorHandler';
-import { notFoundHandler } from '../src/middleware/notFoundHandler';
+import { errorHandler, notFoundHandler } from '../src/middleware/errorHandler';
 
 const app = express();
 app.use(express.json());
