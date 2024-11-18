@@ -83,6 +83,8 @@ This will run the Jest tests and verify that the API key authentication middlewa
 
 ## API Endpoints
 
+- **Note**: The returned balance is in standard units, not in the smallest unit (base units).
+
 ### `GET /balance/:accountAddress`
 
 - **Description**: Returns the CRO balance of the specified account address.
