@@ -1,9 +1,11 @@
 import axios from 'axios';
-import { convertFromSmallestUnit, isValidAddress, logger } from '../utils';
+import { isValidAddress } from '../utils/validator';
 import {
 	BlockchainConnectionError,
 	InvalidAddressError,
 } from '../errors/customErrors';
+import { convertFromSmallestUnit } from '../utils/number';
+import { logger } from '../utils/logger';
 
 const RPC_ENDPOINT = process.env.RPC_ENDPOINT || 'https://evm.cronos.org';
 

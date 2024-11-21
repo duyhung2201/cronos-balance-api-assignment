@@ -4,7 +4,7 @@ import {
 	BlockchainConnectionError,
 	InternalServerError,
 } from '../errors/customErrors';
-import { logger } from '../utils';
+import { logger } from '../utils/logger';
 
 export const errorHandler = (
 	err: Error,

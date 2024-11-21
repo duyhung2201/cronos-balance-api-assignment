@@ -1,16 +1,14 @@
 import axios from 'axios';
-import {
-	convertFromSmallestUnit,
-	getCallData,
-	isValidAddress,
-	logger,
-} from '../utils';
+import { isValidAddress } from '../utils/validator';
 import { abi as crc20Abi } from '../../abi/ERC20.json';
 import {
 	BlockchainConnectionError,
 	InternalServerError,
 	InvalidAddressError,
 } from '../errors/customErrors';
+import { convertFromSmallestUnit } from '../utils/number';
+import { logger } from '../utils/logger';
+import { getCallData } from '../utils/encoder';
 
 const RPC_ENDPOINT = process.env.RPC_ENDPOINT || 'https://evm.cronos.org';
 
