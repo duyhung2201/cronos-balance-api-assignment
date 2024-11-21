@@ -5,7 +5,7 @@ import {
 	isValidAddress,
 	logger,
 } from '../utils';
-import { abi as crc20Abi } from '../abis/ERC20.json';
+import { abi as crc20Abi } from '../../abi/ERC20.json';
 import {
 	BlockchainConnectionError,
 	InternalServerError,
