@@ -1,5 +1,4 @@
 import express from 'express';
-import { Request, Response, NextFunction } from 'express';
 import { balanceController, tokenBalanceController } from './controllers';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import { apiKeyAuth } from './middleware/apiKeyAuth';
