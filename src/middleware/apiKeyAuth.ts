@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { UnauthenticatedError } from '../errors/customErrors';
 
 const API_KEY = process.env.API_KEY || 'your-secure-api-key';
 
@@ -8,13 +9,6 @@ export const apiKeyAuth = (req: Request, res: Response, next: NextFunction) => {
 	if (apiKey && apiKey === API_KEY) {
 		next();
 	} else {
-		res.status(401).json({
-			error: {
-				code: 401,
-				message: 'API key is invalid or missing.',
-				errorType: 'UNAUTHENTICATED',
-				timestamp : new Date().toISOString()
-			},
-		});
+		next(new UnauthenticatedError('API key is invalid or missing.'));
 	}
 };
