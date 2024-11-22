@@ -19,9 +19,9 @@ export class InternalServerError extends Error {
 	}
 }
 
-export class NetworkError extends Error {
+export class UnauthenticatedError extends Error {
 	constructor(message: string) {
 		super(message);
-		this.name = 'NetworkError';
+		this.name = 'UnauthenticatedError';
 	}
 }
